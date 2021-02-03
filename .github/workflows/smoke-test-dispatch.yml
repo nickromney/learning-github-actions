@@ -17,7 +17,9 @@ jobs:
     steps:
     - name: Set up Schmokin
       shell: bash
-      run: curl -Ls https://github.com/reaandrew/schmokin/releases/download/0.1.0/schmokin_install | bash
+      run: |
+        curl -Ls https://github.com/reaandrew/schmokin/releases/download/0.1.0/schmokin_install | bash
+        source ~/.profile
 
     - name: Smoke test URL
       shell: bash

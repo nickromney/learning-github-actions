@@ -15,11 +15,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Set up Schmokin
+    - name: Set up smoke.sh
       shell: bash
       run: |
-        curl -Ls https://github.com/reaandrew/schmokin/releases/download/0.1.0/schmokin_install | bash
-
-    - name: Smoke test URL
-      shell: bash
-      run: ~/.schmokin/schmokin ${{ github.event.inputs.url }} --status --eq 200
+        . bin/smoke.sh
+        smoke_url_ok ${{ github.event.inputs.url }}

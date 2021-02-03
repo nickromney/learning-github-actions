@@ -1,0 +1,24 @@
+name: Smoke Test Manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to test'
+        required: true
+        default: 'nickromney.com'
+
+jobs:
+  smoke-test-dispatch-job:
+    name: Smoke Test ${{ github.event.inputs.url }}
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Set up Schmokin
+      shell: bash
+      run: curl -Ls https://github.com/reaandrew/schmokin/releases/download/0.1.0/schmokin_install | bash
+
+    - name: Smoke test URL
+      shell: bash
+      run: schmokin ${{ github.event.inputs.url }} --status --eq 200

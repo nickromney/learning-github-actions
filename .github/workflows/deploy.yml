@@ -49,7 +49,22 @@ jobs:
         timeoutSeconds: 300
         intervalSeconds: 15
 
-    - name: Report status if smoke test successful
+    - name: Report status if smoke test successful - no brackets
       if: steps.wait_for_smoke_test.outputs.conclusion == 'success'
       shell: bash
-      run: echo "Smoke test step was successful"
+      run: echo "Smoke test step was successful - no brackets"
+
+    - name: Report status if smoke test successful - with brackets
+      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' }}
+      shell: bash
+      run: echo "Smoke test step was successful - with brackets"
+
+    - name: Report status if smoke test successful - with brackets and second logic test
+      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' }} && github.ref == 'refs/heads/main'
+      shell: bash
+      run: echo "Smoke test step was successful - with brackets and second test"
+
+    - name: Report status if smoke test successful - with brackets and second logic test inside brackets
+      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' && github.ref == 'refs/heads/main' }}
+      shell: bash
+      run: echo "Smoke test step was successful - with brackets and second test inside brackets"

@@ -15,7 +15,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Set up smoke.sh
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Test with smoke.sh
       shell: bash
       run: |
         . bin/smoke.sh

@@ -37,7 +37,7 @@ jobs:
       with:
         workflow: Smoke Test Dispatch # Workflow name
         token: ${{ secrets.PERSONAL_TOKEN }}
-        inputs: '{"sha": "${{ github.sha }}", "url": "https://nickromney.com"}'
+        inputs: '{"sha": "${{ github.sha }}", "url": "https://nickromney.co"}'
 
     - name: Wait for smoke test
       id: wait_for_smoke_test

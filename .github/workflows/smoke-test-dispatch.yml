@@ -1,4 +1,4 @@
-name: Smoke Test Manual
+name: Smoke Test Dispatch
 
 on:
   workflow_dispatch:

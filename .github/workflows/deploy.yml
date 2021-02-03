@@ -37,14 +37,14 @@ jobs:
       with:
         workflow: Smoke Test Dispatch # Workflow name
         token: ${{ secrets.PERSONAL_TOKEN }}
-        inputs: '{"sha": "${{ github.sha }}", "url": "https://nickromney.com"}'
+        inputs: '{"sha": "${{ github.sha }}", "url": "https://nickromney.co"}'
 
     - name: Wait for smoke test
       id: wait_for_smoke_test
       uses: fountainhead/action-wait-for-check@v1.0.0
       with:
         token: ${{ secrets.PERSONAL_TOKEN }}
-        checkName: Smoke Test SHA ${{ github.sha }} for URL https://nickromney.com # Job name within workflow
+        checkName: Smoke Test SHA ${{ github.sha }} for URL https://nickromney.co # Job name within workflow
         ref: ${{ github.ref }}
         timeoutSeconds: 300
         intervalSeconds: 15
@@ -68,3 +68,8 @@ jobs:
       if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' && github.ref == 'refs/heads/main' }}
       shell: bash
       run: echo "Smoke test step was successful - with brackets and second test inside brackets"
+
+    - name: Report status if smoke test successful - two conditions, no brackets
+      if: steps.wait_for_smoke_test.outputs.conclusion == 'success' && github.ref == 'refs/heads/main'
+      shell: bash
+      run: echo "Smoke test step was successful - two conditions, no brackets"

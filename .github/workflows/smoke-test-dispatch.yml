@@ -7,10 +7,13 @@ on:
         description: 'URL to test'
         required: true
         default: 'https://nickromney.com'
+      sha:
+        description: 'GitHub SHA'
+        required: true
 
 jobs:
   smoke-test-dispatch-job:
-    name: Smoke Test ${{ github.event.inputs.url }}
+    name: Smoke Test SHA ${{ github.event.inputs.environment }} for URL ${{ github.event.inputs.url }}
 
     runs-on: ubuntu-20.04
 

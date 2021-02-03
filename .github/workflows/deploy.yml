@@ -1,0 +1,55 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+    - 'documentation/**'
+
+jobs:
+  turnstyle:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    steps:
+    - uses: softprops/turnstyle@v1
+      name: Check workflow concurrency
+      with:
+        poll-interval-seconds: 20
+        same-branch-only: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy:
+    name: build docker image and deploy
+    needs: turnstyle
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout Code
+
+    - name: Terraform pin version
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.13.5
+
+    - name: Trigger Smoke Test
+      uses: benc-uk/workflow-dispatch@v1.1
+      with:
+        workflow: Smoke Test Dispatch # Workflow name
+        token: ${{ secrets.PERSONAL_TOKEN }}
+        inputs: '{"sha": "${{ github.sha }}", "url": "https://nickromney.com"}'
+
+    - name: Wait for smoke test
+      id: wait_for_smoke_test
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      with:
+        token: ${{ secrets.PERSONAL_TOKEN }}
+        checkName: Smoke Test SHA ${{ github.sha }} for URL https://nickromney.com # Job name within workflow
+        ref: ${{ github.ref }}
+        timeoutSeconds: 300
+        intervalSeconds: 15
+
+    - name: Report status if smoke test successful
+      if: steps.wait_for_smoke_test.outputs.conclusion == 'success'
+      shell: bash
+      run: echo "Smoke test step was successful"

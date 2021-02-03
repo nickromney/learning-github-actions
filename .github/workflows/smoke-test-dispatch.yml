@@ -6,7 +6,7 @@ on:
       url:
         description: 'URL to test'
         required: true
-        default: 'nickromney.com'
+        default: 'https://nickromney.com'
 
 jobs:
   smoke-test-dispatch-job:
@@ -19,8 +19,7 @@ jobs:
       shell: bash
       run: |
         curl -Ls https://github.com/reaandrew/schmokin/releases/download/0.1.0/schmokin_install | bash
-        source ~/.profile
 
     - name: Smoke test URL
       shell: bash
-      run: schmokin ${{ github.event.inputs.url }} --status --eq 200
+      run: ~/.schmokin/schmokin ${{ github.event.inputs.url }} --status --eq 200

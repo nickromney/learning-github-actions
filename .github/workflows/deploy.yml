@@ -27,11 +27,6 @@ jobs:
     - uses: actions/checkout@v2
       name: Checkout Code
 
-    - name: Terraform pin version
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 0.13.5
-
     - name: Trigger Smoke Test
       uses: benc-uk/workflow-dispatch@v1.1
       with:
@@ -53,6 +48,11 @@ jobs:
       if: steps.wait_for_smoke_test.outputs.conclusion == 'success'
       shell: bash
       run: echo "Smoke test step was successful - no brackets"
+
+    - name: Install TF - should be skipped over if first test not successful
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.13.5
 
     - name: Report status if smoke test successful - with brackets
       if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' }}

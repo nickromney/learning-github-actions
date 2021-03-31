@@ -12,13 +12,13 @@ jobs:
     name: build docker image and deploy
     runs-on: ubuntu-20.04
     steps:
-    - name: run
-      id: turnstyle
-      uses: beckermr/turnstyle-python@v1
+    - uses: softprops/turnstyle@v1
+      name: Check workflow concurrency
       with:
-        poll-interval-seconds: 5    # checks the status of any previous runs at this interval
-        abort-after-seconds: 720   # use this to abort instead of continue
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        poll-interval-seconds: 20
+        same-branch-only: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v2
       name: Checkout Code
 

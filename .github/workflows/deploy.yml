@@ -8,22 +8,17 @@ on:
     - 'documentation/**'
 
 jobs:
-  turnstyle:
-    runs-on: ubuntu-20.04
-    timeout-minutes: 20
-    steps:
-    - uses: softprops/turnstyle@v1
-      name: Check workflow concurrency
-      with:
-        poll-interval-seconds: 20
-        same-branch-only: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   deploy:
     name: build docker image and deploy
-    needs: turnstyle
     runs-on: ubuntu-20.04
     steps:
+    - name: run
+      id: turnstyle
+      uses: beckermr/turnstyle-python@v1
+      with:
+        poll-interval-seconds: 20    # checks the status of any previous runs at this interval
+        abort-after-seconds: 720   # use this to abort instead of continue
+        github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v2
       name: Checkout Code
 
@@ -52,24 +47,4 @@ jobs:
     - name: Install TF - should be skipped over if first test not successful
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 0.13.5
-
-    - name: Report status if smoke test successful - with brackets
-      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' }}
-      shell: bash
-      run: echo "Smoke test step was successful - with brackets"
-
-    - name: Report status if smoke test successful - with brackets and second logic test
-      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' }} && github.ref == 'refs/heads/main'
-      shell: bash
-      run: echo "Smoke test step was successful - with brackets and second test"
-
-    - name: Report status if smoke test successful - with brackets and second logic test inside brackets
-      if: ${{ steps.wait_for_smoke_test.outputs.conclusion == 'success' && github.ref == 'refs/heads/main' }}
-      shell: bash
-      run: echo "Smoke test step was successful - with brackets and second test inside brackets"
-
-    - name: Report status if smoke test successful - two conditions, no brackets
-      if: steps.wait_for_smoke_test.outputs.conclusion == 'success' && github.ref == 'refs/heads/main'
-      shell: bash
-      run: echo "Smoke test step was successful - two conditions, no brackets"
+        terraform_version: 0.14.9

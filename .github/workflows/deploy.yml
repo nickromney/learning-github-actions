@@ -52,10 +52,10 @@ jobs:
         timeoutSeconds: 300
         intervalSeconds: 15
 
-    - name: Report status if smoke test successful - no brackets
-      if: steps.wait_for_smoke_test.outputs.conclusion == 'success'
+    - name: Fail whole workflow if smoke test not successful
+      if: steps.wait_for_smoke_test.outputs.conclusion != 'success'
       shell: bash
-      run: echo "Smoke test step was successful - no brackets"
+      run: exit 1
 
     - name: Install TF - should be skipped over if first test not successful
       uses: hashicorp/setup-terraform@v1

@@ -15,6 +15,7 @@ jobs:
     - uses: DFE-Digital/github-actions/turnstyle@master
       name: Check workflow concurrency
       with:
+        initial-wait-seconds: 20
         poll-interval-seconds: 20
         same-branch-only: true
       env:

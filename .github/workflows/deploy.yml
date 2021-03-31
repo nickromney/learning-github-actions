@@ -16,7 +16,7 @@ jobs:
       id: turnstyle
       uses: beckermr/turnstyle-python@v1
       with:
-        poll-interval-seconds: 20    # checks the status of any previous runs at this interval
+        poll-interval-seconds: 5    # checks the status of any previous runs at this interval
         abort-after-seconds: 720   # use this to abort instead of continue
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v2

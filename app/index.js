@@ -8,6 +8,8 @@ const config = require("../config");
 const paths = require("../config/paths");
 const routes = require("./routes");
 
+// Add a comment to generate a commit
+
 // Set up the express app
 const app = express();
 

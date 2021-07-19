@@ -9,6 +9,7 @@ const paths = require("../config/paths");
 const routes = require("./routes");
 
 // Add a comment to generate a commit
+// Add a second comment where the cache should be present
 
 // Set up the express app
 const app = express();

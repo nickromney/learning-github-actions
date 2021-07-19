@@ -17,7 +17,7 @@ jobs:
       run: |
         TZ=UTC
         TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
-        echo "${TIMESTAMP} - proving ad-m/github-push-action can commit and push back to repo" >> README.md
+        echo "\n${TIMESTAMP} - proving ad-m/github-push-action can commit and push back to repo" >> README.md
     - name: Commit files
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -26,5 +26,4 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}

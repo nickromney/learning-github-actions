@@ -9,10 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - 
+      name: set-matrix
+      id: set-matrix
+      run: |
+        sudo apt-get install jq
+        echo "::set-output name=matrix::$(bash bin/get-docker-contexts.sh)"
+  outputs:
+    matrix: ${{ steps.set-matrix.outputs.matrix }}
 
   build:
     runs-on: ubuntu-latest
     needs: pre-build
+    strategy:
+      matrix:
+        dockercontext: ${{fromJson(needs.pre-build.outputs.matrix)}}
     steps:
     - uses: actions/checkout@v2
     -
@@ -22,18 +33,9 @@ jobs:
       name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
     -
-      name: Build Docker image one
-      id: docker_build_one
+      name: Build Docker image 
       uses: docker/build-push-action@v2
       with:
-        context: ./apps/docker-node-example
+        context: ${{ matrix.dockercontext }}
         push: false
         tags: docker-node-example:latest
-    -
-      name: Build Docker image two
-      id: docker_build_two
-      uses: docker/build-push-action@v2
-      with:
-        context: ./apps/docker-rails-example
-        push: false
-        tags: docker-rails-example:latest    

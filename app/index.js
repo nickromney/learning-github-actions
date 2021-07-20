@@ -8,6 +8,11 @@ const config = require("../config");
 const paths = require("../config/paths");
 const routes = require("./routes");
 
+// Add a comment to generate a commit
+// Add a second comment where the cache should be present
+// Third commit - don't first set up Node version 14
+// Fourth commit - try fetch-depth:0
+
 // Set up the express app
 const app = express();
 
